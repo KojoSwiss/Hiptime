@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_action :find_item, only: [:show, :edit, :update, :destroy]
   def index
-    @items = Item.all.order("created_at DESC")
+    @items = Item.where(user_id: current_user.id).order("created_at DESC")
   end
 
   def show
@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
   def create
     @item = current_user.items.build(item_params)
     if @item.save
-      redirect_to root_path
+      redirect_to items_path
     else
       render 'new'
     end
@@ -33,7 +33,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item.destroy
-    redirect_to root_path
+    redirect_to items_path
   end
 
   private
